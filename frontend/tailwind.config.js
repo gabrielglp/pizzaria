@@ -13,6 +13,15 @@ module.exports = {
         'gradient-conic':
           'conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))',
       },
+      keyframes: {
+        animate: {
+          '0%': { transform: 'rotate(0deg)' },
+          '100%': { transform: 'rotate(360deg)' },
+        },
+      },
+      animation: {
+        animate: 'animate 2s infinite',
+      },
       placeholderColor: ['hover', 'focus'],
       colors: {
         white: '#FFF',

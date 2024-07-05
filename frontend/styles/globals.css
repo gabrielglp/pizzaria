@@ -8,6 +8,16 @@
   }
 }
 
+@layer components {
+  .button-disabled {
+    @apply disabled:opacity-50;
+
+    &:disabled svg {
+      @apply animate-animate;
+    }
+  }
+}
+
 * {
   margin: 0;
   padding: 0;
