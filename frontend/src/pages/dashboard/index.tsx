@@ -8,7 +8,7 @@ export default function DashBoard() {
     return (
         <>
             <Head>
-                <title>Pedidos - Sujeito Pizza</title>
+                <title>Painel - Sujeito Pizza</title>
             </Head>
             <div>
                 <Header/>
