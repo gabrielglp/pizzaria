@@ -22,6 +22,13 @@ module.exports = {
       animation: {
         animate: 'animate 2s infinite',
       },
+      transitionDuration: {
+        700: '700ms',
+        800: '800ms',
+      },
+      scale: {
+        120: '1.2',
+      },
       placeholderColor: ['hover', 'focus'],
       colors: {
         white: '#FFF',
