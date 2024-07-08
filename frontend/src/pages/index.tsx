@@ -8,6 +8,8 @@ import Image from "next/image";
 import { Input } from "../components/ui/Input";
 import { Button } from "../components/ui/Button";
 
+import { toast } from "react-toastify";
+
 import Link from "next/link";
 
 import { AuthContext } from "../contexts/AuthContext";
@@ -24,6 +26,7 @@ export default function Home() {
     e.preventDefault();
 
     if(email === '' || password === '') {
+      toast.warning('Preencha todos os campos');
       return;
     }
 
