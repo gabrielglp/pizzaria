@@ -30,6 +30,9 @@ module.exports = {
         120: '1.2',
       },
       placeholderColor: ['hover', 'focus'],
+      borderRadius: {
+        'custom-1': '6px 0 0 6px',
+      },
       colors: {
         white: '#FFF',
         black: '#000',

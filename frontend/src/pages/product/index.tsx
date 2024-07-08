@@ -1,4 +1,4 @@
-import { useState, ChangeEvent } from "react"
+import { useState, ChangeEvent, FormEvent } from "react"
 import Head from "next/head"
 import { Header } from "../../components/Header"
 
@@ -7,6 +7,7 @@ import { canSSRAuth } from "../../utils/canSSRAuth"
 import { FiUpload } from 'react-icons/fi'
 
 import { setupAPIClient } from "../../services/api"
+import { toast } from "react-toastify"
 
 type ItemProps = {
     id: string;
@@ -18,6 +19,10 @@ interface CategoryProps {
 }
 
 export default function Product({ categoryList }: CategoryProps) {
+
+    const [name, setName] = useState('');
+    const [price, setPrice] = useState('');
+    const [description, setDescription] = useState('');
 
     const [avatarUrl, setAvatarUrl] = useState('');
     const [imageAvatar, setImageAvatar] = useState(null);
@@ -47,6 +52,41 @@ export default function Product({ categoryList }: CategoryProps) {
         setCategorySelected(e.target.value);
     }
 
+    async function handleRegister(e: FormEvent) {
+        e.preventDefault();
+
+        try {
+            const data = new FormData();
+
+            if(name === '' || price === '' || description === '' || imageAvatar === null) {
+                toast.warning('Preencha todos os campos!')
+                return;
+            }
+
+            data.append('name', name);
+            data.append('price', price);
+            data.append('description', description);
+            data.append('file', imageAvatar);
+            data.append('category_id', categories[categorySelected].id);
+
+            const apiClient = setupAPIClient();
+
+            await apiClient.post('/products', data);
+
+            toast.success('Cadastrado com sucesso!');
+
+        } catch(err) {
+            console.log(err)
+            toast.error('Ops erro ao cadastrar!');
+        }
+
+        setName('');
+        setPrice('');
+        setDescription('');
+        setAvatarUrl('');
+        setImageAvatar(null);
+    }
+
     return (
         <>
             <Head>
@@ -59,7 +99,7 @@ export default function Product({ categoryList }: CategoryProps) {
                 <main className="max-w-[720px] m-16 mx-auto px-8 flex justify-between flex-col">
                     <h1 className="text-white font-bold text-3xl">Novo Produto</h1>
 
-                    <form className="flex flex-col my-4">
+                    <form className="flex flex-col my-4" onSubmit={handleRegister}>
                         <label className="w-full h-72 bg-dark-900 mb-4 rounded-md flex justify-center items-center cursor-pointer">
                             <span className="z-50 absolute opacity-70 hover:opacity-100 hover:scale-120 transform transition-transform duration-800">
                                 <FiUpload size={30} color="#FFF" />
@@ -86,10 +126,24 @@ export default function Product({ categoryList }: CategoryProps) {
                             })}
                         </select>
 
-                        <input className="rounded-md mb-4 bg-dark-900 text-white border border-gray-100 h-10 px-2" type="text" placeholder="Digite o nome do produto"/>
-                        <input className="rounded-md mb-4 bg-dark-900 text-white border border-gray-100 h-10 px-2" type="text" placeholder="Preço do produto"/>
+                        <input 
+                        className="rounded-md mb-4 bg-dark-900 text-white border border-gray-100 h-10 px-2" 
+                        type="text" placeholder="Digite o nome do produto" 
+                        value={name} 
+                        onChange={(e) => setName(e.target.value)}/>
 
-                        <textarea className="w-full min-h-32 resize-none rounded-md mb-4 bg-dark-900 text-white border border-gray-100 h-10 p-2" placeholder="Descreva o seu produto"/>
+                        <input 
+                        className="rounded-md mb-4 bg-dark-900 text-white border border-gray-100 h-10 px-2" 
+                        type="text" 
+                        placeholder="Preço do produto" 
+                        value={price} 
+                        onChange={(e) => setPrice(e.target.value)}/>
+
+                        <textarea 
+                        className="w-full min-h-32 resize-none rounded-md mb-4 bg-dark-900 text-white border border-gray-100 h-10 p-2" 
+                        placeholder="Descreva o seu produto" 
+                        value={description} 
+                        onChange={(e) => setDescription(e.target.value)}/>
 
                         <button className="h-10 bottom-0 bg-green-900 font-bold rounded-md text-dark-700">
                             Cadastrar
