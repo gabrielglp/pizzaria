@@ -68,6 +68,29 @@ export default function DashBoard({ orders }: HomeProps) {
         setModalVisible(true);
     }
 
+    async function handleFinishItem(id: string) {
+        const apiClient = setupAPIClient();
+
+        await apiClient.put('/order/finish', {
+            order_id: id,
+        })
+
+        const response = await apiClient.get('/orders');
+
+        setOrderList(response.data);
+
+        setModalVisible(false);
+    }
+
+    async function handleRefreshOrders() {
+        const apiClient = setupAPIClient();
+
+        const response = await apiClient.get('/orders');
+        
+        setOrderList(response.data);
+
+    }
+
     Modal.setAppElement('#__next')
 
     return (
@@ -81,7 +104,7 @@ export default function DashBoard({ orders }: HomeProps) {
                 <main className="max-w-[720px] m-16 mx-auto px-8 flex flex-col">
                     <div className="flex flex-row">
                         <h1 className="text-white text-3xl mr-4">Últimos pedidos</h1>
-                        <button>
+                        <button onClick={handleRefreshOrders}>
                             <FiRefreshCcw 
                                 color="#3fffa3"
                                 size={25}
@@ -90,6 +113,12 @@ export default function DashBoard({ orders }: HomeProps) {
                     </div>
                     
                     <article className="flex flex-col my-4">
+
+                        {orderList.length === 0 && (
+                            <span className="text-gray-100 text-xl">
+                                Nenhum pedido aberto foi encontrado...
+                            </span>
+                        )}
 
                         {orderList.map( item => (
                             <section key={item.id} className="flex flex-row bg-dark-900 mb-4 items-center rounded-md">
@@ -104,7 +133,7 @@ export default function DashBoard({ orders }: HomeProps) {
                     </article>
                 </main>
                 { modalVisible && (
-                    <ModalOrder/>
+                    <ModalOrder isOpen={modalVisible} onRequestClose={handleCloseModal} order={modalItem} handleFinishOrder={handleFinishItem}/>
                 )}
             </div>
         </>

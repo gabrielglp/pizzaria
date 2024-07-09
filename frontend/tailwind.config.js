@@ -8,6 +8,9 @@ module.exports = {
   ],
   theme: {
     extend: {
+      screens: {
+        mm: '410px',
+      },
       backgroundImage: {
         'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
         'gradient-conic':
@@ -32,6 +35,9 @@ module.exports = {
       placeholderColor: ['hover', 'focus'],
       borderRadius: {
         'custom-1': '6px 0 0 6px',
+      },
+      backgroundColor: {
+        'custom-black': 'rgba(0, 0, 0, 0.4)',
       },
       colors: {
         white: '#FFF',
